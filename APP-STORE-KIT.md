@@ -4,10 +4,11 @@ Everything to paste into App Store Connect, plus what still needs doing on your 
 
 ## Before you start
 
-1. Host the `site` folder somewhere with HTTPS. Netlify or GitHub Pages take the folder as it is. Three URLs come out of it:
-   - Marketing URL: `https://yourdomain/`
-   - Support URL: `https://yourdomain/support.html`
-   - Privacy Policy URL: `https://yourdomain/privacy.html`
+1. The site is live on GitHub Pages. The address is case-sensitive (capital A):
+   - Marketing URL: `https://vvmoore213-cyber.github.io/Anthesis/`
+   - Support URL: `https://vvmoore213-cyber.github.io/Anthesis/support.html`
+   - Privacy Policy URL: `https://vvmoore213-cyber.github.io/Anthesis/privacy.html`
+   When you buy a domain, add it in the repo's Pages settings and update these three fields in App Store Connect and the link in Paywall.swift.
 2. Replace the two `href="#appstore"` App Store links in `index.html` with the real App Store link once the app has an ID (App Store Connect shows it under App Information).
 3. The support and privacy pages use vvmoore213@gmail.com. Change it if you want a separate address.
 4. In Xcode the Bundle ID is `com.vvmoore.anthesis`, version 1.0, build 1, iPhone only, portrait only, and the Team is set. Upload a build with Product, Archive, then Distribute App, App Store Connect.
