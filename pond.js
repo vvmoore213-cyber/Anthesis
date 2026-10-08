@@ -15,11 +15,54 @@
 
   let W = 0, H = 0, unit = 1, dpr = 1;
   let orbs = [], rings = [], petals = [], clock = 0, last = performance.now(), idle = 0, idleTap = 0;
+  let running = true;
+  const sprites = {};   // pre-scaled flowers, glow and tinted petals, rebuilt on resize
+
+  function sprite(key, w, h, paint) {
+    const k = key + '|' + Math.round(w) + 'x' + Math.round(h);
+    if (sprites[k]) return sprites[k];
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w * dpr)); c.height = Math.max(1, Math.round(h * dpr));
+    const g = c.getContext('2d');
+    g.scale(dpr, dpr);
+    paint(g, w, h);
+    sprites[k] = c;
+    return c;
+  }
+
+  function flowerSprite(src, size) {
+    const im = img[src];
+    if (!im.complete || !im.naturalWidth) return null;
+    return sprite(src, size, size, (g, w, h) => g.drawImage(im, 0, 0, w, h));
+  }
+
+  function glowSprite(hue, r) {
+    return sprite('glow' + hue, r * 2, r * 2, (g, w, h) => {
+      const gr = g.createRadialGradient(w / 2, h / 2, r * 0.12, w / 2, h / 2, r);
+      gr.addColorStop(0, `hsla(${hue},45%,80%,0.45)`); gr.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    });
+  }
+
+  function petalSprite(hue, w) {
+    const im = img['img/Petal.png'];
+    if (!im.complete || !im.naturalWidth) return null;
+    const h = w * im.naturalHeight / im.naturalWidth;
+    return sprite('petal' + hue, w, h, (g, pw, ph) => {
+      g.drawImage(im, 0, 0, pw, ph);
+      // Tint the pale petal with the flower's colour, keeping its shading
+      g.globalCompositeOperation = 'multiply';
+      g.fillStyle = `hsl(${hue},55%,78%)`; g.fillRect(0, 0, pw, ph);
+      g.globalCompositeOperation = 'destination-in';
+      g.drawImage(im, 0, 0, pw, ph);
+    });
+  }
 
   function resize() {
-    dpr = Math.min(2, window.devicePixelRatio || 1);
+    for (const k in sprites) delete sprites[k];
     const r = canvas.getBoundingClientRect();
     W = r.width; H = r.height;
+    dpr = Math.min(W < 700 ? 1.5 : 1.25, window.devicePixelRatio || 1);
     canvas.width = W * dpr; canvas.height = H * dpr;
     unit = Math.min(W, H) / 420;
     if (W < 600) unit *= 1.5;
@@ -45,6 +88,7 @@
   }
 
   function addRing(x, y, source, reach, strength, r0) {
+    if (rings.length > 24) rings.shift();
     rings.push({ x, y, r: r0 || 0, prev: r0 || 0, max: Math.hypot(Math.max(x, W - x), Math.max(y, H - y)) + 20, source, reach: reach || 0, strength: strength || 1 });
   }
 
@@ -141,8 +185,9 @@
       p.life -= dt * (p.glint ? 2 : 0.3);
     }
     petals = petals.filter(p => p.life > 0);
+    if (petals.length > 160) petals.splice(0, petals.length - 160);
     draw();
-    requestAnimationFrame(step);
+    if (running) requestAnimationFrame(step);
   }
 
   function draw() {
@@ -166,7 +211,6 @@
     ctx.globalCompositeOperation = 'source-over';
 
     // Petals on the water
-    const petal = img['img/Petal.png'];
     for (const p of petals) {
       ctx.save();
       ctx.globalAlpha = Math.min(1, p.life * 1.6);
@@ -175,11 +219,13 @@
         ctx.globalCompositeOperation = 'lighter';
         ctx.fillStyle = 'hsla(46,70%,80%,0.9)';
         ctx.beginPath(); ctx.arc(0, 0, p.size, 0, 6.283); ctx.fill();
-      } else if (petal.complete && petal.naturalWidth) {
-        ctx.rotate(p.rot);
-        const w = p.size * 1.6, h = w * (petal.naturalHeight / petal.naturalWidth);
-        ctx.filter = `hue-rotate(${p.hue - 340}deg)`;
-        ctx.drawImage(petal, -w / 2, -h / 2, w, h);
+      } else {
+        const sp = petalSprite(p.hue, Math.round(p.size * 1.6));
+        if (sp) {
+          ctx.rotate(p.rot);
+          const w = sp.width / dpr, h = sp.height / dpr;
+          ctx.drawImage(sp, -w / 2, -h / 2, w, h);
+        }
       }
       ctx.restore();
     }
@@ -190,35 +236,43 @@
       if (!o.alive) {
         const open = 1 - Math.max(0, o.pop);
         const s = size * (0.9 + 0.6 * Math.min(1, open * 2.2));
-        const im = img[blooms[o.k]];
-        if (!im.complete) continue;
+        const sp = flowerSprite(blooms[o.k], Math.round(size * 1.5));
+        if (!sp) continue;
         ctx.save(); ctx.globalAlpha = Math.min(1, o.pop * 1.7);
         ctx.translate(o.x, o.y); ctx.rotate(o.seed + open * 0.25);
-        ctx.drawImage(im, -s / 2, -s / 2, s, s); ctx.restore();
+        ctx.drawImage(sp, -s / 2, -s / 2, s, s); ctx.restore();
         continue;
       }
       const t = Math.min(1, (clock - o.born) / 0.45);
       const appear = 1 + 2.7 * Math.pow(t - 1, 3) + 1.7 * Math.pow(t - 1, 2);
       const breathe = 1 + Math.sin(clock * 1.4 + o.seed) * 0.025;
       const bob = Math.sin(clock * 0.6 + o.seed) * 3 * unit;
+      const gr = o.r * (1.8 + 1.8 * o.glow);
+      const gs = glowSprite(hues[o.k], Math.round(o.r * 3.6));
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      const g = ctx.createRadialGradient(o.x, o.y + bob, o.r * 0.4, o.x, o.y + bob, o.r * (1.8 + 1.8 * o.glow));
-      g.addColorStop(0, `hsla(${hues[o.k]},45%,80%,${0.1 + 0.35 * o.glow})`); g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(o.x, o.y + bob, o.r * 3.6, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 0.25 + 0.75 * o.glow;
+      ctx.drawImage(gs, o.x - gr, o.y + bob - gr, gr * 2, gr * 2);
       ctx.restore();
-      const im = img[buds[o.k]];
-      if (!im.complete) continue;
+      const sp = flowerSprite(buds[o.k], Math.round(size));
+      if (!sp) continue;
       ctx.save();
       ctx.translate(o.x, o.y + bob);
       ctx.scale(appear * breathe * (2 - o.scale), appear * breathe * o.scale);
       ctx.rotate(o.seed + Math.sin(clock * 0.3 + o.seed) * 0.12);
-      ctx.drawImage(im, -size / 2, -size / 2, size, size);
+      ctx.drawImage(sp, -size / 2, -size / 2, size, size);
       ctx.restore();
     }
   }
 
   resize();
   window.addEventListener('resize', resize);
+
+  function setRunning(on) {
+    if (on && !running) { running = true; last = performance.now(); requestAnimationFrame(step); }
+    else if (!on) running = false;
+  }
+  new IntersectionObserver(entries => setRunning(entries[0].isIntersecting && !document.hidden), { threshold: 0.05 }).observe(canvas);
+  document.addEventListener('visibilitychange', () => setRunning(!document.hidden && canvas.getBoundingClientRect().bottom > 0));
   requestAnimationFrame(step);
 })();
