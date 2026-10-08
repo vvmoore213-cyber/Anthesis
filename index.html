@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthesis</title>
+<meta name="description" content="A pond of flower buds. Tap with both thumbs: where two ripples cross, a bud blooms and the chain begins. A game for the ten minutes an urge takes to pass.">
+<meta property="og:title" content="Anthesis">
+<meta property="og:description" content="Where two ripples cross, a bud blooms. A game for riding out an urge, with a garden that grows with every clean day.">
+<meta property="og:image" content="img/icon.png">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,100,1;1,9..144,300..500,100,1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .hero { position: relative; height: 100svh; min-height: 560px; }
+  #pond { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: manipulation; cursor: crosshair; }
+  .hero .top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; }
+  .hero .top a { pointer-events: auto; }
+  .hero-copy {
+    position: absolute; inset: auto 0 0 0; z-index: 2; pointer-events: none;
+    padding-bottom: clamp(2rem, 6vh, 4.5rem);
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0) 100%);
+    padding-top: 8rem;
+  }
+  .hero-copy > .wrap > * { pointer-events: auto; }
+  .hero-copy h1 { margin-bottom: 0.15em; }
+  .hero-copy p { font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 32rem; margin-bottom: 1.6rem; color: var(--ink); }
+  .hero-copy .hint { font-size: 1rem; color: var(--silver); margin: 0 0 1.4rem; max-width: none; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+
+  .herbarium { padding-top: 0; }
+  .herbarium h2 { margin-bottom: 1.4rem; }
+  .shelf {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1.2rem 0.6rem;
+    margin-top: 2rem;
+  }
+  .shelf figure img { max-width: 140px; }
+  .shelf figcaption { font-size: 0.95rem; line-height: 1.3; }
+  .shelf figcaption span { display: block; font-style: normal; color: var(--ink); }
+
+  .honest { border-top: 1px solid rgba(255,255,255,0.14); }
+  .honest ul { list-style: none; padding: 0; margin: 1.6rem 0 0; max-width: var(--measure); }
+  .honest li { padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1rem; justify-content: space-between; }
+  .honest li span:last-child { color: var(--silver); white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="pond" aria-label="A dark pond of flower buds. Tap the water to send out ripples; where two cross on a bud, it blooms."></canvas>
+  <div class="top wrap">
+    <a class="name" href="./"><img src="img/icon.png" alt="" width="28" height="28">Anthesis</a>
+    <nav>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </div>
+  <div class="hero-copy">
+    <div class="wrap">
+      <h1>Anth<em>esis</em></h1>
+      <p>Where two ripples cross, a bud blooms. A game for the ten minutes an urge takes to pass.</p>
+      <p class="hint">Tap the water above, from two sides at once.</p>
+      <div class="actions">
+        <a class="pill" href="#appstore" id="store-link">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4.1 2.5-1.8 3-.5 7.6 1.3 10.1.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.3c.7-.8 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
+          Download on the App Store
+        </a>
+        <a class="pill quiet" href="#how">How it plays</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="how" class="wrap flower-row">
+    <div>
+      <h2>One ripple only makes a bud stir.</h2>
+      <p>Tap the pond and a ring spreads across the water. A bud it passes trembles, but holds. Tap from the other side at the same moment and the two rings meet on it. It opens, bursts into petals, and sends out a bright ring of its own.</p>
+      <p>That bright ring opens any bud close enough. Clusters go off like dominoes, the chain count climbs, and every tap plays a note in key with the music. The whole thing takes both thumbs and all your attention, which is the point.</p>
+    </div>
+    <figure>
+      <img src="img/Bloom0.png" alt="A peony in full bloom, seen from above" width="360" height="360" loading="lazy">
+      <figcaption>Paeonia</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap flower-row flip">
+    <div>
+      <h2>Made for the worst ten minutes.</h2>
+      <p>Urges rise, peak and pass. The hard part is what to do with your hands and your head while you wait. Before a round you rate how strong the urge is, from one to ten. After, you rate it again. Over time the app shows you how much it drops while you play, in your own numbers.</p>
+      <p>It works for whatever you are trying to leave behind. The app never asks what that is.</p>
+    </div>
+    <figure>
+      <img src="img/BloomLily.png" alt="A white water lily" width="360" height="360" loading="lazy">
+      <figcaption>Nymphaea</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap flower-row">
+    <div>
+      <h2>A garden that grows with every clean day.</h2>
+      <p>Set your start date and the count begins. Each clean day plants a flower in your garden, and new kinds arrive at milestones: poppies at three days, water lilies at two weeks, dandelions at a month, moonflowers at a year.</p>
+      <p>If you slip, the count starts again from today. Nothing in your garden is taken away.</p>
+    </div>
+    <figure>
+      <img src="img/Dandelion.png" alt="A dandelion clock" width="360" height="360" loading="lazy">
+      <figcaption>Taraxacum</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap flower-row flip">
+    <div>
+      <h2>Forty puzzle ponds.</h2>
+      <p>Each pond is a fixed arrangement of buds and a small number of ripples to clear it with. Find where two rings would cross on the right bud, and where its bloom would reach, and the whole pond goes in one move. Three blossoms for clearing it at par.</p>
+      <p>Every three ponds brings a new flower, announced by name the first time it floats in.</p>
+    </div>
+    <figure>
+      <img src="img/BloomClematis.png" alt="A violet clematis" width="360" height="360" loading="lazy">
+      <figcaption>Clematis</figcaption>
+    </figure>
+  </section>
+
+  <section class="wrap herbarium">
+    <h2>Fifteen flowers.</h2>
+    <p>Each one photographed from above, with its own bud, bloom and petal shape.</p>
+    <div class="shelf">
+      <figure><img src="img/Bloom0.png" alt="" loading="lazy"><figcaption><span>Peony</span>Paeonia</figcaption></figure>
+      <figure><img src="img/Bloom1.png" alt="" loading="lazy"><figcaption><span>Poppy</span>Papaver</figcaption></figure>
+      <figure><img src="img/Bloom2.png" alt="" loading="lazy"><figcaption><span>Anemone</span>Anemone</figcaption></figure>
+      <figure><img src="img/BloomLily.png" alt="" loading="lazy"><figcaption><span>Water lily</span>Nymphaea</figcaption></figure>
+      <figure><img src="img/Dandelion.png" alt="" loading="lazy"><figcaption><span>Dandelion</span>Taraxacum</figcaption></figure>
+      <figure><img src="img/BloomRanunculus.png" alt="" loading="lazy"><figcaption><span>Ranunculus</span>Ranunculus</figcaption></figure>
+      <figure><img src="img/BloomCamellia.png" alt="" loading="lazy"><figcaption><span>Camellia</span>Camellia</figcaption></figure>
+      <figure><img src="img/BloomDahlia.png" alt="" loading="lazy"><figcaption><span>Dahlia</span>Dahlia</figcaption></figure>
+      <figure><img src="img/BloomClematis.png" alt="" loading="lazy"><figcaption><span>Clematis</span>Clematis</figcaption></figure>
+      <figure><img src="img/BloomLotus.png" alt="" loading="lazy"><figcaption><span>Lotus</span>Nelumbo</figcaption></figure>
+      <figure><img src="img/BloomPassion.png" alt="" loading="lazy"><figcaption><span>Passionflower</span>Passiflora</figcaption></figure>
+      <figure><img src="img/BloomHellebore.png" alt="" loading="lazy"><figcaption><span>Hellebore</span>Helleborus</figcaption></figure>
+      <figure><img src="img/BloomMagnolia.png" alt="" loading="lazy"><figcaption><span>Magnolia</span>Magnolia</figcaption></figure>
+      <figure><img src="img/BloomChrysanthemum.png" alt="" loading="lazy"><figcaption><span>Spider chrysanthemum</span>Chrysanthemum</figcaption></figure>
+      <figure><img src="img/BloomMoonflower.png" alt="" loading="lazy"><figcaption><span>Moonflower</span>Ipomoea alba</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="wrap honest" id="appstore">
+    <h2>Nothing leaves your phone.</h2>
+    <p>There is no account to make and nothing to sign in to. Your ratings, your clean days and your garden are stored on your phone and nowhere else.</p>
+    <ul>
+      <li><span>Account</span><span>None</span></li>
+      <li><span>Ads</span><span>None</span></li>
+      <li><span>Analytics or tracking</span><span>None</span></li>
+      <li><span>Data collected</span><span>None</span></li>
+      <li><span>Works offline</span><span>Yes</span></li>
+      <li><span>Requires</span><span>iPhone, iOS 17 or later</span></li>
+    </ul>
+    <p style="margin-top:2rem"><a class="pill" href="#appstore" id="store-link-2">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4.1 2.5-1.8 3-.5 7.6 1.3 10.1.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.3c.7-.8 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
+      Download on the App Store</a></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Anthesis, by Jonathan Moore.</span>
+    <nav>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy policy</a>
+      <a href="support.html#licences">Licences</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="pond.js" defer></script>
+</body>
+</html>
