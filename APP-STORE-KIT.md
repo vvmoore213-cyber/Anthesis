@@ -10,7 +10,9 @@ Everything to paste into App Store Connect, plus what still needs doing on your 
    - Privacy Policy URL: `https://yourdomain/privacy.html`
 2. Replace the two `href="#appstore"` App Store links in `index.html` with the real App Store link once the app has an ID (App Store Connect shows it under App Information).
 3. The support and privacy pages use vvmoore213@gmail.com. Change it if you want a separate address.
-4. In Xcode, set the Bundle ID (for example `com.jonathanmoore.anthesis`), version 1.0, build 1, and check the Team is set. Upload a build with Product, Archive, then Distribute App.
+4. In Xcode the Bundle ID is `com.vvmoore.anthesis`, version 1.0, build 1, iPhone only, portrait only, and the Team is set. Upload a build with Product, Archive, then Distribute App, App Store Connect.
+5. On upload, Xcode asks "Does your app use encryption?" Answer No: the app makes no network calls of its own. Answer the same in App Store Connect if it asks again. (To skip the question in future, add `ITSAppUsesNonExemptEncryption` = NO to the Info tab of the target.)
+6. The privacy manifest (`PrivacyInfo.xcprivacy`) is in the project and declares UserDefaults with reason CA92.1. Without it, the upload is rejected with an ITMS-91053 error.
 
 ## App Information
 
