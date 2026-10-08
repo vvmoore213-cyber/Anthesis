@@ -23,7 +23,19 @@ Everything to paste into App Store Connect, plus what still needs doing on your 
 
 ## Pricing
 
-Free. No in-app purchases at launch.
+The app is free. One non-consumable in-app purchase, "Full bloom".
+
+Create it under Monetisation, In-App Purchases, before you submit the version, and tick it on the version page so it is reviewed with the build:
+- Type: Non-Consumable
+- Reference name: Full bloom
+- Product ID: `com.vvmoore.anthesis.fullbloom` (must match exactly; it is in Purchases.swift and Products.storekit)
+- Price: tier of your choice; the test file uses $4.99
+- Display name: Full bloom
+- Description: The garden and every puzzle pond, for good.
+- Review screenshot: a screenshot of the paywall screen in the app (required)
+- Family Sharing: on
+
+To test before submitting: in Xcode, Product, Scheme, Edit Scheme, Run, Options, set StoreKit Configuration to Products.storekit. Purchases then succeed on the simulator without charging anything. Turn it back to None before archiving.
 
 ## Version Information
 
@@ -50,6 +62,8 @@ Description (4000 max):
 >
 > NOTHING LEAVES YOUR PHONE
 > No account, no ads, no analytics, no tracking. Your ratings, your clean days and your garden are stored on your phone and nowhere else. It works fully offline.
+>
+> Playing the pond, rating the urge and counting clean days are free. Full bloom, a single purchase, grows your days into the garden and opens all forty puzzle ponds.
 >
 > Anthesis is a distraction for a few hard minutes, not a treatment. If you are struggling, please reach out to someone.
 
@@ -110,4 +124,5 @@ Up to 30 seconds, same sizes as screenshots, captured with the device's screen r
 - Guideline 1.4.1 (physical harm): the app gives no medical advice and says it is not a treatment, in the app and on the support page. Keep it that way.
 - Guideline 5.1.1 (data): "Data Not Collected" with a working privacy URL clears this.
 - Guideline 4.2 (minimum functionality): not a concern; it is a full game.
+- Guideline 3.1.1 (in-app purchase): the paywall says what is paid, has a Restore purchase button and a privacy link, and the free part of the app works without buying. Attach the IAP to the version or the reviewer cannot test it; if it is not attached, the build is rejected with a note about "missing in-app purchase".
 - Crash on launch is the most common rejection. Install the archived build on a real phone through TestFlight first and play a full round, a puzzle, and the garden.
