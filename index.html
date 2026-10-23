@@ -4,53 +4,77 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anthesis</title>
-<meta name="description" content="A pond of flower buds. Tap with both thumbs: where two ripples cross, a bud blooms and the chain begins. A game for the ten minutes an urge takes to pass.">
+<meta name="description" content="A game for riding out cravings. Ten minutes on a pond of X-ray flowers: tap, bloom, chain, until the urge passes. Every clean day adds a mantis to your tank.">
 <meta property="og:title" content="Anthesis">
-<meta property="og:description" content="Where two ripples cross, a bud blooms. A game for riding out an urge, with a garden that grows with every clean day.">
-<meta property="og:image" content="img/icon.png">
+<meta property="og:description" content="A game for riding out cravings. Ten minutes on a pond of X-ray flowers, until the urge passes.">
+<meta property="og:image" content="https://vvmoore213-cyber.github.io/Anthesis/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0A0C0F">
 <link rel="icon" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,100,1;1,9..144,300..500,100,1&display=swap" rel="stylesheet">
+<link rel="preload" href="fonts/ResonanceMono-Regular.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="stylesheet" href="style.css">
 <style>
-  .hero { position: relative; height: 100svh; min-height: 560px; }
+  .hero { position: relative; height: 100svh; min-height: 600px; overflow: hidden; }
   #pond { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: manipulation; cursor: crosshair; }
   .hero .top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none; }
   .hero .top a { pointer-events: auto; }
   .hero-copy {
     position: absolute; inset: auto 0 0 0; z-index: 2; pointer-events: none;
-    padding-bottom: clamp(2rem, 6vh, 4.5rem);
-    background: linear-gradient(to top, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0) 100%);
-    padding-top: 8rem;
+    padding-bottom: clamp(2rem, 6vh, 4rem); padding-top: 9rem;
+    background: linear-gradient(to top, rgba(10,12,15,0.92) 35%, rgba(10,12,15,0) 100%);
   }
   .hero-copy > .wrap > * { pointer-events: auto; }
-  .hero-copy h1 { margin-bottom: 0.15em; }
-  .hero-copy p { font-size: clamp(1.15rem, 2vw, 1.5rem); max-width: 32rem; margin-bottom: 1.6rem; color: var(--ink); }
-  .hero-copy .hint { font-size: 1rem; color: var(--silver); margin: 0 0 1.4rem; max-width: none; }
-  .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+  .hero-copy .sig { margin-bottom: 1rem; }
+  .hero-copy h1 { margin-bottom: 0.25em; }
+  .hero-copy .lead { font-size: clamp(1rem, 1.6vw, 1.2rem); max-width: 34rem; margin-bottom: 1.4rem; }
+  .hero-copy .hint { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); margin: 0 0 1.6rem; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
+  /* The readings that sit round the hero, like the start screen's */
+  .hud { position: absolute; z-index: 2; font-size: 0.7rem; letter-spacing: 0.12em; color: var(--dim); pointer-events: none; }
+  .hud.a { top: 5.2rem; right: 1rem; text-align: right; }
+  .hud.b { top: 40%; left: 1rem; border-left: 1px solid var(--hair); padding-left: 0.6rem; }
+  .hud .live { color: var(--ink); }
+  @media (max-width: 720px) { .hud.b { display: none; } }
 
-  .herbarium { padding-top: 0; }
-  .herbarium h2 { margin-bottom: 1.4rem; }
-  .shelf {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1.2rem 0.6rem;
-    margin-top: 2rem;
-  }
-  .shelf figure img { max-width: 140px; }
-  .shelf figcaption { font-size: 0.95rem; line-height: 1.3; }
-  .shelf figcaption span { display: block; font-style: normal; color: var(--ink); }
+  /* The ten minutes, charted */
+  .arc { padding-top: 0; }
+  .arc svg { width: 100%; height: auto; display: block; max-width: 62rem; margin-top: 1rem; }
+  .arc text { font-family: inherit; font-size: 10px; letter-spacing: 1.5px; fill: var(--dim); }
+  .arc .k { fill: var(--pink); }
+  .arc .w { fill: var(--ink); }
 
-  .honest { border-top: 1px solid rgba(255,255,255,0.14); }
-  .honest ul { list-style: none; padding: 0; margin: 1.6rem 0 0; max-width: var(--measure); }
-  .honest li { padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1rem; justify-content: space-between; }
-  .honest li span:last-child { color: var(--silver); white-space: nowrap; }
+  /* Bosses: five tabs on a hairline */
+  .bosses { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin-top: 1.6rem; }
+  .bosses figure { border: 1px solid var(--faint); padding: 1rem 0.6rem; background: rgba(10,12,15,0.6); }
+  .bosses figure img { max-width: 110px; }
+  .bosses figcaption { font-size: 0.66rem; }
+  .bosses figcaption b { display: block; margin: 0 0 0.1rem; }
+
+  /* The tank */
+  .tank { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 36%); gap: clamp(1.5rem, 5vw, 5rem); align-items: center; }
+  .viv { position: relative; max-width: 300px; margin-inline: auto; }
+  .viv img.back { width: 100%; height: auto; display: block; opacity: 0.85; }
+  .viv img.m { position: absolute; left: 50%; top: 36%; width: 46%; transform: translate(-50%, -50%);
+               filter: drop-shadow(0 0 14px rgba(230,128,255,0.6)); }
+  .viv .read { position: absolute; left: 8%; bottom: 7%; font-size: 0.62rem; letter-spacing: 0.1em; color: var(--dim); line-height: 1.5; }
+  .viv .read b { font-weight: 400; color: #E680FF; }
+  .specimens { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 0.5rem; margin-top: 2rem; }
+  .specimens figure { border: 1px solid var(--faint); padding: 0.8rem 0.4rem 0.6rem; }
+  .specimens figure img { max-width: 70px; filter: none; }
+  .specimens figcaption { font-size: 0.6rem; margin-top: 0.4rem; }
+  .specimens figcaption b { display: block; margin: 0 0 0.1rem; }
+  @media (max-width: 720px) { .tank { grid-template-columns: 1fr; } }
+
+  /* The poster strip */
+  .poster { padding: 0; }
+  .poster img { width: 100%; height: auto; display: block; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
 </style>
 </head>
 <body>
 
 <header class="hero">
-  <canvas id="pond" aria-label="A dark pond of flower buds. Tap the water to send out ripples; where two cross on a bud, it blooms."></canvas>
+  <canvas id="pond" aria-label="A dark pond of X-ray flower buds. Tap the water to send out ripples; where two cross on a bud, it blooms and bursts into colour."></canvas>
   <div class="top wrap">
     <a class="name" href="./"><img src="img/icon.png" alt="" width="28" height="28">Anthesis</a>
     <nav>
@@ -58,109 +82,137 @@
       <a href="privacy.html">Privacy</a>
     </nav>
   </div>
+  <div class="hud a">SPECIMEN 115<br><span class="live" id="code">01  5796  8782+33</span></div>
+  <div class="hud b">647.7468<br>CHAIN <span class="live" id="chain">00</span></div>
   <div class="hero-copy">
     <div class="wrap">
-      <h1>Anth<em>esis</em></h1>
-      <p>Where two ripples cross, a bud blooms. A game for the ten minutes an urge takes to pass.</p>
-      <p class="hint">Tap the water above, from two sides at once.</p>
+      <div class="sig"><span class="n">signal.</span>a game for riding out cravings</div>
+      <h1>ANTHESIS</h1>
+      <p class="lead">An urge rises, peaks and fades, usually inside ten minutes. Anthesis is a game built to get you through them: a pond of X-ray flowers that bloom in chains and burst like fireworks, in time with the music.</p>
+      <p class="hint">Try it above. Tap the water from two sides at once.</p>
       <div class="actions">
-        <a class="pill" href="#appstore" id="store-link">
+        <a class="box" href="#appstore" id="store-link">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4.1 2.5-1.8 3-.5 7.6 1.3 10.1.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.3c.7-.8 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
           Download on the App Store
         </a>
-        <a class="pill quiet" href="#how">How it plays</a>
+        <a class="box quiet" href="#how">How it plays</a>
       </div>
     </div>
   </div>
 </header>
 
 <main>
-  <section id="how" class="wrap flower-row">
+  <section id="how" class="wrap row">
     <div>
-      <h2>One ripple only makes a bud stir.</h2>
-      <p>Tap the pond and a ring spreads across the water. A bud it passes trembles, but holds. Tap from the other side at the same moment and the two rings meet on it. It opens, bursts into petals, and sends out a bright ring of its own.</p>
-      <p>That bright ring opens any bud close enough. Clusters go off like dominoes, the chain count climbs, and every tap plays a note in key with the music. The whole thing takes both thumbs and all your attention, which is the point.</p>
+      <div class="sig"><span class="n">fig.01</span>the pond</div>
+      <h2>Where two ripples cross, a bud blooms.</h2>
+      <p>Tap the pond and a scan ring spreads across the water. A bud it passes trembles, but holds. Tap from the other side at the same moment and the two rings meet on it. It opens, tears into a burst of colour, and sends out a bright ring of its own.</p>
+      <p>That ring opens any bud close enough. Clusters go off like dominoes, the chain count climbs, and every tap plays a note in key with the music. Every pond deals its flowers five colours of their own, and every flower has its own way of breaking: a tear, a rain, a star, a scan, a mosaic.</p>
     </div>
     <figure>
-      <img src="img/Bloom0.png" alt="A peony in full bloom, seen from above" width="360" height="360" loading="lazy">
-      <figcaption>Paeonia</figcaption>
+      <img src="img/XrayBloom1.png" alt="A peony as an X-ray, every petal translucent" width="360" height="360" loading="lazy">
+      <figcaption><b>SP.01</b>Paeonia</figcaption>
     </figure>
   </section>
 
-  <section class="wrap flower-row flip">
-    <div>
-      <h2>Made for the worst ten minutes.</h2>
-      <p>Urges rise, peak and pass. The hard part is what to do with your hands and your head while you wait. Before a round you rate how strong the urge is, from one to ten. After, you rate it again. Over time the app shows you how much it drops while you play, in your own numbers.</p>
-      <p>It works for whatever you are trying to leave behind. The app never asks what that is.</p>
+  <section class="wrap arc">
+    <div class="sig"><span class="n">fig.02</span>the ten minutes</div>
+    <h2>Made for the worst ten minutes.</h2>
+    <p>Before you play, you rate the urge from one to ten. After, you rate it again, and the app keeps your numbers so you can see how much it drops. The session has a shape: a run in, a boss at the halfway mark where an urge is usually strongest, and a settling at the end.</p>
+    <svg viewBox="0 0 1000 220" role="img" aria-label="The ten minutes charted: the urge rises to a peak around minute four, where the boss appears, then falls away by minute ten.">
+      <line x1="40" y1="180" x2="960" y2="180" stroke="#E8EEF2" stroke-opacity="0.3"/>
+      <g stroke="#E8EEF2" stroke-opacity="0.3">
+        <line x1="40" y1="180" x2="40" y2="172"/><line x1="224" y1="180" x2="224" y2="172"/><line x1="408" y1="180" x2="408" y2="172"/>
+        <line x1="592" y1="180" x2="592" y2="172"/><line x1="776" y1="180" x2="776" y2="172"/><line x1="960" y1="180" x2="960" y2="172"/>
+      </g>
+      <path d="M40 150 C 160 140, 260 60, 400 48 S 640 110, 760 150 S 900 170, 960 172" fill="none" stroke="#7CF2D8" stroke-width="1.6"/>
+      <path d="M40 150 C 160 140, 260 60, 400 48 S 640 110, 760 150 S 900 170, 960 172" fill="none" stroke="#FF5FA2" stroke-width="1.6" transform="translate(3 0)" opacity="0.6"/>
+      <circle cx="400" cy="48" r="4" fill="#FF5FA2"/>
+      <circle cx="400" cy="48" r="12" fill="none" stroke="#FF5FA2" stroke-opacity="0.5"/>
+      <text x="40" y="205">00:00</text><text x="400" y="205" text-anchor="middle">05:00</text><text x="960" y="205" text-anchor="end">10:00</text>
+      <text x="400" y="30" text-anchor="middle" class="k">BOSS FLOWER</text>
+      <text x="60" y="140" class="w">RATE THE URGE</text>
+      <text x="960" y="160" text-anchor="end" class="w">IT HAS PASSED</text>
+    </svg>
+  </section>
+
+  <section class="wrap">
+    <div class="sig"><span class="n">fig.03</span>specimen xl</div>
+    <h2>A boss you open on the beat.</h2>
+    <p>Halfway through, the pond clears and one giant flower takes it. A ring closes in with the music; tap the flower the moment the ring meets its edge and a layer tears away. Miss, and it knits back and the ring comes round again. Four layers, and the whole pond goes up when the last one goes. Five bosses, one each day.</p>
+    <div class="bosses">
+      <figure><img src="img/XrayBloom1.png" alt="" loading="lazy"><figcaption><b>MON</b>Giant peony</figcaption></figure>
+      <figure><img src="img/XrayBloom10.png" alt="" loading="lazy"><figcaption><b>TUE</b>Crowned passionflower</figcaption></figure>
+      <figure><img src="img/XrayBloom14.png" alt="" loading="lazy"><figcaption><b>WED</b>King protea</figcaption></figure>
+      <figure><img src="img/XrayBloom6.png" alt="" loading="lazy"><figcaption><b>THU</b>Night water lily</figcaption></figure>
+      <figure><img src="img/XrayBloom12.png" alt="" loading="lazy"><figcaption><b>FRI</b>Ghost orchid</figcaption></figure>
     </div>
-    <figure>
-      <img src="img/BloomLily.png" alt="A white water lily" width="360" height="360" loading="lazy">
-      <figcaption>Nymphaea</figcaption>
+  </section>
+
+  <section class="wrap tank" id="tank">
+    <div>
+      <div class="sig"><span class="n">fig.04</span>the tank</div>
+      <h2>A tank that fills with every clean day.</h2>
+      <p>Set your start date and the count begins. Each clean day brings a praying mantis closer, each in a vivarium of its own, planted for where it lives: moss for the moss mantis, orchids for the orchid mantis, a floor of curled leaves for the dead leaf. Twenty-four species over a year, each with a fact and, when you tap it, its true colour.</p>
+      <p>If you slip, the count starts again from today. Nothing in your tank is taken away for good; they come back as you go again.</p>
+      <p><small>Counting clean days is free. The tank and the puzzle ponds beyond the first six are part of Full bloom, a single purchase.</small></p>
+    </div>
+    <figure class="viv">
+      <img class="back" src="img/Vivarium23.jpg" alt="A glass vivarium as an X-ray, planted with orchids" width="376" height="672" loading="lazy">
+      <img class="m" src="img/MantisOrchid.png" alt="An orchid mantis" loading="lazy">
+      <div class="read"><b>SP.23  ORCHID MANTIS</b><br>0.424  0.287<br>BL 067MM  H 335</div>
     </figure>
   </section>
 
-  <section class="wrap flower-row">
+  <section class="wrap">
+    <div class="sig"><span class="n">fig.05</span>specimens</div>
+    <h2>Twenty-four mantises.</h2>
+    <p>Every one an X-ray, from the European mantis on day one to the devil's flower mantis at a year.</p>
+    <div class="specimens">
+      <figure><img src="img/MantisEuropean.png" alt="" loading="lazy"><figcaption><b>D.001</b>European</figcaption></figure>
+      <figure><img src="img/MantisDeadLeaf.png" alt="" loading="lazy"><figcaption><b>D.014</b>Dead leaf</figcaption></figure>
+      <figure><img src="img/MantisJewelled.png" alt="" loading="lazy"><figcaption><b>D.050</b>Jewelled</figcaption></figure>
+      <figure><img src="img/MantisUnicorn.png" alt="" loading="lazy"><figcaption><b>D.075</b>Unicorn</figcaption></figure>
+      <figure><img src="img/MantisSpinyFlower.png" alt="" loading="lazy"><figcaption><b>D.180</b>Spiny flower</figcaption></figure>
+      <figure><img src="img/MantisGhost.png" alt="" loading="lazy"><figcaption><b>D.270</b>Ghost</figcaption></figure>
+      <figure><img src="img/MantisOrchid.png" alt="" loading="lazy"><figcaption><b>D.330</b>Orchid</figcaption></figure>
+      <figure><img src="img/MantisDevilsFlower.png" alt="" loading="lazy"><figcaption><b>D.365</b>Devil's flower</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="wrap row flip">
     <div>
-      <h2>A garden that grows with every clean day.</h2>
-      <p>Set your start date and the count begins. Each clean day plants a flower in your garden, and new kinds arrive at milestones: poppies at three days, water lilies at two weeks, dandelions at a month, moonflowers at a year.</p>
-      <p>If you slip, the count starts again from today. Nothing in your garden is taken away.</p>
-      <p><small>Counting clean days is free. The garden and the puzzle ponds beyond the first six are part of Full bloom, a single purchase.</small></p>
+      <div class="sig"><span class="n">fig.06</span>anxious</div>
+      <h2>Anxious instead of craving.</h2>
+      <p>Calm mode swaps tapping for holding. Hold a flower as you breathe in, let it go as you breathe out, and the pond plays itself as a slow harp, low on the left and high on the right. No chains, no count, no clock to beat.</p>
     </div>
     <figure>
-      <img src="img/Dandelion.png" alt="A dandelion clock" width="360" height="360" loading="lazy">
-      <figcaption>Taraxacum</figcaption>
+      <img src="img/XrayBloom6.png" alt="A water lily as an X-ray" width="360" height="360" loading="lazy">
+      <figcaption><b>SP.06</b>Nymphaea</figcaption>
     </figure>
   </section>
 
-  <section class="wrap flower-row flip">
-    <div>
-      <h2>Forty puzzle ponds.</h2>
-      <p>Each pond is a fixed arrangement of buds and a small number of ripples to clear it with. Find where two rings would cross on the right bud, and where its bloom would reach, and the whole pond goes in one move. Three blossoms for clearing it at par.</p>
-      <p>Every three ponds brings a new flower, announced by name the first time it floats in.</p>
-    </div>
-    <figure>
-      <img src="img/BloomClematis.png" alt="A violet clematis" width="360" height="360" loading="lazy">
-      <figcaption>Clematis</figcaption>
-    </figure>
+  <section class="poster">
+    <img src="img/poster.jpg" alt="The Anthesis specimen: a praying mantis on an X-ray peony, split pink and cyan, over a web of fine lines and glitch bars" width="1920" height="823" loading="lazy">
   </section>
 
-  <section class="wrap herbarium">
-    <h2>Fifteen flowers.</h2>
-    <p>Each one photographed from above, with its own bud, bloom and petal shape.</p>
-    <div class="shelf">
-      <figure><img src="img/Bloom0.png" alt="" loading="lazy"><figcaption><span>Peony</span>Paeonia</figcaption></figure>
-      <figure><img src="img/Bloom1.png" alt="" loading="lazy"><figcaption><span>Poppy</span>Papaver</figcaption></figure>
-      <figure><img src="img/Bloom2.png" alt="" loading="lazy"><figcaption><span>Anemone</span>Anemone</figcaption></figure>
-      <figure><img src="img/BloomLily.png" alt="" loading="lazy"><figcaption><span>Water lily</span>Nymphaea</figcaption></figure>
-      <figure><img src="img/Dandelion.png" alt="" loading="lazy"><figcaption><span>Dandelion</span>Taraxacum</figcaption></figure>
-      <figure><img src="img/BloomRanunculus.png" alt="" loading="lazy"><figcaption><span>Ranunculus</span>Ranunculus</figcaption></figure>
-      <figure><img src="img/BloomCamellia.png" alt="" loading="lazy"><figcaption><span>Camellia</span>Camellia</figcaption></figure>
-      <figure><img src="img/BloomDahlia.png" alt="" loading="lazy"><figcaption><span>Dahlia</span>Dahlia</figcaption></figure>
-      <figure><img src="img/BloomClematis.png" alt="" loading="lazy"><figcaption><span>Clematis</span>Clematis</figcaption></figure>
-      <figure><img src="img/BloomLotus.png" alt="" loading="lazy"><figcaption><span>Lotus</span>Nelumbo</figcaption></figure>
-      <figure><img src="img/BloomPassion.png" alt="" loading="lazy"><figcaption><span>Passionflower</span>Passiflora</figcaption></figure>
-      <figure><img src="img/BloomHellebore.png" alt="" loading="lazy"><figcaption><span>Hellebore</span>Helleborus</figcaption></figure>
-      <figure><img src="img/BloomMagnolia.png" alt="" loading="lazy"><figcaption><span>Magnolia</span>Magnolia</figcaption></figure>
-      <figure><img src="img/BloomChrysanthemum.png" alt="" loading="lazy"><figcaption><span>Spider chrysanthemum</span>Chrysanthemum</figcaption></figure>
-      <figure><img src="img/BloomMoonflower.png" alt="" loading="lazy"><figcaption><span>Moonflower</span>Ipomoea alba</figcaption></figure>
-    </div>
-  </section>
-
-  <section class="wrap honest" id="appstore">
+  <section class="wrap" id="appstore">
+    <div class="sig"><span class="n">fig.07</span>readings</div>
     <h2>Nothing leaves your phone.</h2>
-    <p>There is no account to make and nothing to sign in to. Your ratings, your clean days and your garden are stored on your phone and nowhere else.</p>
-    <ul>
+    <p>There is no account to make and nothing to sign in to. Your ratings, your clean days and your tank are stored on your phone and nowhere else.</p>
+    <ul class="readings">
       <li><span>Account</span><span>None</span></li>
       <li><span>Ads</span><span>None</span></li>
       <li><span>Analytics or tracking</span><span>None</span></li>
       <li><span>Data collected</span><span>None</span></li>
       <li><span>Works offline</span><span>Yes</span></li>
-      <li><span>Price</span><span>Free. One purchase for the garden and all forty ponds</span></li>
+      <li><span>Price</span><span>Free. One purchase for the tank and every pond</span></li>
       <li><span>Requires</span><span>iPhone, iOS 17 or later</span></li>
     </ul>
-    <p style="margin-top:2rem"><a class="pill" href="#appstore" id="store-link-2">
+    <p style="margin-top:2rem"><a class="box" href="#appstore" id="store-link-2">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4.1 2.5-1.8 3-.5 7.6 1.3 10.1.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.3.8 1.4 0 2.3-1.2 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.8-4.1zM13.9 5.3c.7-.8 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>
       Download on the App Store</a></p>
+    <p><small>Anthesis is not treatment and does not replace support. It is one more thing to reach for instead.</small></p>
   </section>
 </main>
 
